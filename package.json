@@ -1,0 +1,70 @@
+{
+  "name": "sistema-estoque-electron",
+  "version": "1.0.0",
+  "description": "Sistema de Gerenciamento de Estoque - Desktop",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "dev": "electron . --dev",
+    "backend:migrate": "node backend/scripts/migrate.js create",
+    "backend:reset": "node backend/scripts/migrate.js reset",
+    "backend:seed": "node backend/scripts/seed.js run",
+    "backend:clear": "node backend/scripts/seed.js clear",
+    "build": "electron-builder",
+    "build-win": "electron-builder --win",
+    "build-mac": "electron-builder --mac",
+    "build-linux": "electron-builder --linux"
+  },
+  "keywords": [
+    "estoque",
+    "inventario",
+    "desktop",
+    "electron"
+  ],
+  "author": "mario_pena",
+  "license": "MIT",
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "cors": "^2.8.5",
+    "dotenv": "^16.3.1",
+    "express": "^4.18.2",
+    "express-rate-limit": "^6.10.0",
+    "helmet": "^7.0.0",
+    "joi": "^17.9.2",
+    "jsonwebtoken": "^9.0.2",
+    "morgan": "^1.10.0",
+    "mysql2": "^3.15.3",
+    "sequelize": "^6.37.7"
+  },
+  "devDependencies": {
+    "electron": "^38.0.0",
+    "electron-builder": "^24.0.0",
+    "nodemon": "^3.0.1"
+  },
+  "build": {
+    "appId": "com.mariopena.sistema-estoque",
+    "productName": "Sistema de Estoque",
+    "directories": {
+      "output": "dist"
+    },
+    "files": [
+      "main.js",
+      "preload.js",
+      "backend/**/*",
+      "frontend/**/*",
+      "node_modules/**/*",
+      "package.json"
+    ],
+    "win": {
+      "icon": "assets/icon.ico",
+      "target": "nsis"
+    },
+    "mac": {
+      "icon": "assets/icon.icns"
+    },
+    "linux": {
+      "icon": "assets/icon.png",
+      "target": "AppImage"
+    }
+  }
+}
