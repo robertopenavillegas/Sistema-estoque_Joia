@@ -5,7 +5,7 @@ class StockManager {
         this.init();
     }
 
-    // Inicializar e carregar dados
+    
     async init() {
         await this.loadProducts();
         await this.loadHistory();
@@ -154,7 +154,7 @@ class StockManager {
         let csvContent = headers.join(';') + '\n';
 
         history.forEach(entry => {
-            // Como o ID é timestamp, vamos usá-lo como data
+            
             const date = new Date(entry.id).toLocaleString('pt-BR');
             const type = entry.type === 'entry' ? 'Entrada' : entry.type === 'exit' ? 'Saída' : 'Ajuste';
             const row = [
@@ -197,7 +197,7 @@ let stockManager;
 async function loadPage(pageName) {
     const content = document.getElementById('page-content');
 
-    // Mostrar indicador de carregamento
+    
     content.innerHTML = `
         <div class="text-center py-5">
             <div class="spinner-border text-primary" role="status">
@@ -239,12 +239,12 @@ document.addEventListener('DOMContentLoaded', async function() {
     try {
         stockManager = new StockManager();
         
-        // Aguardar carregamento inicial dos dados
+        
         await stockManager.init();
         
         console.log('✓ Aplicação pronta!');
         
-        // Carregar página inicial
+        
         await loadPage('index');
     } catch (error) {
         console.error('❌ Erro ao inicializar aplicação:', error);

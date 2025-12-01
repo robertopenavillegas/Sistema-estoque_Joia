@@ -175,12 +175,12 @@ async function filterStock() {
 
     let filteredProducts = stockManager.products;
 
-    // Filtro por categoria
+    
     if (categoryFilter) {
         filteredProducts = filteredProducts.filter(product => product.category === categoryFilter);
     }
 
-    // Filtro por busca de texto
+    
     if (searchFilter) {
         filteredProducts = filteredProducts.filter(product => 
             product.name.toLowerCase().includes(searchFilter) ||
@@ -188,7 +188,7 @@ async function filterStock() {
         );
     }
 
-    // Filtro por validade
+    
     if (expiryFilter) {
         if (expiryFilter === 'expired') {
             filteredProducts = filteredProducts.filter(product => {
@@ -197,10 +197,10 @@ async function filterStock() {
             });
         } else {
             const days = parseInt(expiryFilter);
-            // Buscar produtos vencendo do banco de dados
+           
             const expiringProducts = await stockManager.getExpiringProducts(days);
             
-            // Filtrar apenas os IDs dos produtos vencendo que já passaram pelos filtros anteriores
+            
             const expiringIds = expiringProducts.map(p => p.id);
             filteredProducts = filteredProducts.filter(p => expiringIds.includes(p.id));
         }
@@ -213,7 +213,7 @@ async function showProductHistory(productId) {
     const product = stockManager.products.find(p => p.id === productId);
     if (!product) return;
 
-    // Buscar histórico específico do produto no banco
+    
     const result = await window.api.history.getByProduct(productId);
     const productHistory = result.success ? result.history : [];
     
@@ -233,11 +233,11 @@ async function showProductHistory(productId) {
             </div>
         `;
     } else {
-        // Ordenar por ID decrescente (mais recente primeiro)
+        
         productHistory.sort((a, b) => b.id - a.id);
         
         productHistory.forEach(entry => {
-            // Usar o ID como timestamp ou criar data atual
+            
             const date = new Date(entry.id || Date.now()).toLocaleString('pt-BR');
             const typeText = entry.type === 'entry' ? 'Entrada' : entry.type === 'exit' ? 'Saída' : 'Ajuste';
             const typeClass = `history-${entry.type}`;
@@ -357,7 +357,7 @@ async function executeStockAdjustment(productId) {
             break;
     }
 
-    // Atualizar quantidade no banco de dados
+    
     const updateResult = await stockManager.updateProductQuantity(productId, newQuantity);
     
     if (!updateResult.success) {
@@ -365,7 +365,7 @@ async function executeStockAdjustment(productId) {
         return;
     }
 
-    // Adicionar ao histórico
+   
     const historyObservation = observation || `Ajuste de estoque: ${adjustmentType === 'entry' ? 'Entrada' : adjustmentType === 'exit' ? 'Saída' : 'Ajuste'}`;
     await stockManager.addHistory(
         productId, 
@@ -376,11 +376,11 @@ async function executeStockAdjustment(productId) {
         newQuantity
     );
 
-    // Fechar modal
+    
     const modal = bootstrap.Modal.getInstance(document.getElementById('adjustStockModal'));
     modal.hide();
 
-    // Atualizar tabela
+    
     await filterStock();
 
     showSuccessMessage(`Estoque ajustado com sucesso! Nova quantidade: ${newQuantity}`);
@@ -394,7 +394,7 @@ async function removeProduct(productId) {
     const product = stockManager.products.find(p => p.id === productId);
     if (!product) return;
 
-    // Adicionar ao histórico antes de remover
+   
     await stockManager.addHistory(
         productId, 
         'exit', 
@@ -404,11 +404,11 @@ async function removeProduct(productId) {
         0
     );
     
-    // Deletar produto do banco (soft delete - muda status para inactive)
+    
     const result = await stockManager.deleteProduct(productId);
     
     if (result.success) {
-        // Recarregar lista
+        
         await filterStock();
         showSuccessMessage('Produto removido com sucesso!');
     } else {

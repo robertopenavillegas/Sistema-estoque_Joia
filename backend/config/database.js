@@ -13,10 +13,10 @@ const dbConfig = {
   charset: 'utf8mb4'
 };
 
-// Criar pool de conexões
+
 const pool = mysql.createPool(dbConfig);
 
-// Função para testar conexão
+
 async function testConnection() {
   try {
     const connection = await pool.getConnection();
@@ -29,7 +29,7 @@ async function testConnection() {
   }
 }
 
-// Função auxiliar para executar queries
+
 async function query(sql, params = []) {
   try {
     const [rows] = await pool.execute(sql, params);

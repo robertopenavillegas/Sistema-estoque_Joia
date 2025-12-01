@@ -1,12 +1,12 @@
 async function loadIndexPage(content) {
-    // Recarregar dados do banco antes de exibir
+    
     await stockManager.loadProducts();
     await stockManager.loadHistory();
     
     const totalProducts = stockManager.products.reduce((sum, product) => sum + product.quantity, 0);
     const totalValue = stockManager.products.reduce((sum, product) => sum + (product.quantity * product.value), 0);
     
-    // Buscar produtos vencendo nos próximos 7 dias
+    
     const expiringProducts = await stockManager.getExpiringProducts(7);
     const expiringCount = expiringProducts.length;
 
@@ -108,7 +108,7 @@ function getCategoryStats() {
 }
 
 function getRecentHistory() {
-    // Ordenar histórico por ID (mais recente primeiro) e pegar os últimos 5
+    
     const recentHistory = [...stockManager.history]
         .sort((a, b) => b.id - a.id)
         .slice(0, 5);
@@ -116,7 +116,7 @@ function getRecentHistory() {
     let html = '';
 
     recentHistory.forEach(entry => {
-        // Usar o ID como timestamp ou criar data
+        
         const date = new Date(entry.id || Date.now()).toLocaleDateString('pt-BR');
         const typeIcon = entry.type === 'entry' ? 'plus' : entry.type === 'exit' ? 'minus' : 'edit';
         const typeColor = entry.type === 'entry' ? 'success' : entry.type === 'exit' ? 'danger' : 'warning';
@@ -136,16 +136,16 @@ function getRecentHistory() {
 }
 
 async function generateMonthlyReport() {
-    // Recarregar histórico do banco
+    
     await stockManager.loadHistory();
     
     const currentDate = new Date();
     const currentMonth = currentDate.getMonth();
     const currentYear = currentDate.getFullYear();
 
-    // Filtrar histórico do mês atual
+    
     const monthlyHistory = stockManager.history.filter(entry => {
-        // Usar o ID como timestamp (assumindo que ID é timestamp ou criar Date)
+       
         const entryDate = new Date(entry.id || Date.now());
         return entryDate.getMonth() === currentMonth && entryDate.getFullYear() === currentYear;
     });

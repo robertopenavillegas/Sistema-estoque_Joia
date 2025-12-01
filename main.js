@@ -42,7 +42,7 @@ app.on("activate", () => {
   }
 });
 
-// Configurar handlers IPC
+
 function setupIpcHandlers() {
   
   // ============ PRODUTOS ============
